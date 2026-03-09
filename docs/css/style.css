@@ -1,0 +1,372 @@
+@charset "UTF-8";
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  touch-action: none;
+  height: 100%;
+  font-family: Arial, sans-serif;
+}
+
+#map {
+  width: 100vw;
+  height: 100vh;
+  background: #f0f0f0;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+}
+
+svg {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  display: block;
+  touch-action: none;
+  cursor: grab;
+}
+
+#inner {
+  transform-origin: 0 0;
+  transition: none;
+}
+
+/* Контейнер для кнопок */
+
+#controls {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#controls button {
+  background: white;
+  border: 1px solid #888;
+  border-radius: 4px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+#controls button:hover {
+  background-color: #eee;
+}
+
+#controls button:active {
+  background-color: #ccc;
+}
+
+.balloon {
+  background: #FFF;
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  max-height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 50px 25px 25px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.balloon__wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 320px;
+}
+
+.balloon__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.balloon__content .line {
+  min-height: 22px;
+  line-height: 1.2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  font-size: 12px;
+}
+
+.balloon__close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+
+.balloon__close-button svg {
+  cursor: inherit;
+}
+
+.balloon__button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid #2D5E58;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.balloon__button--color {
+  background-color: #2D5E58;
+  color: #fff;
+}
+
+.location {
+  font-size: 16px;
+  color: #2B2A29;
+}
+
+.location p {
+  margin: 0;
+  padding: 0;
+}
+
+.location__title {
+  margin: 0;
+  display: flex;
+  gap: 15px;
+  font-size: 20px;
+  color: #2D5E58;
+  padding: 0;
+}
+
+.house {
+  position: relative;
+  line-height: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+
+.house .line {
+  line-height: 1.2;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+}
+
+.house__img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  -o-object-position: center;
+  object-position: center;
+  -o-object-fit: cover;
+  object-fit: cover;
+  line-height: 0;
+}
+
+.house__description {
+  display: inline-block;
+  width: auto;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: auto;
+  padding: 5px 10px;
+  background-color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.05;
+}
+
+#location-number {
+  display: inline-flex;
+  justify-content: center;
+  width: 60px;
+  height: 46px;
+  background-color: #c0c0c0;
+  font-size: 14px;
+  color: #FFF;
+  padding: 0 5px;
+  border-radius: 5px;
+  align-items: center;
+}
+
+#location-status {
+  display: inline-flex;
+  width: 50%;
+  flex-grow: 1;
+}
+
+#location-area,
+#location-price,
+#house-area,
+#house-price,
+#total-price {
+  font-size: 16px;
+  font-weight: 700;
+  color: #2D5E58;
+  width: 120px;
+  text-align: right;
+}
+
+/*#location-price,
+#house-price {
+   position: relative;
+   right: 8px;
+}*/
+
+#balloon {
+  position: fixed;
+  z-index: 9999;
+  background: #fff;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* По умолчанию скрыт снизу */
+
+/* На десктопе — просто показываем */
+
+#balloon-overlay {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  /* ниже balloon, но выше остального */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  pointer-events: all;
+}
+
+#balloon.balloon--active + #balloon-overlay,
+#balloon-overlay.active {
+  display: block;
+}
+
+#house-area::before,
+#house-price::before,
+#total-price::before {
+  content: "от ";
+}
+
+/* Прелоадер */
+
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.loader {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #ddd;
+  border-top-color: #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+#loading-text {
+  font-size: 18px;
+  color: #333;
+  letter-spacing: 1px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+@media (min-width: 768px) {
+  .balloon {
+    top: 50%;
+    left: 50%;
+    bottom: unset;
+    transform: translateX(-50%) translateY(-50%);
+    border-radius: 16px;
+    width: 320px;
+  }
+
+  .balloon__wrap {
+    max-width: unset;
+  }
+
+  .balloon__close-button {
+    top: 10px;
+    right: 10px;
+  }
+
+  #balloon {
+    bottom: unset;
+    display: none;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #balloon.balloon--active {
+    display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  #balloon {
+    bottom: 0;
+    transform: translateY(100%);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #balloon.balloon--active {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+/*# sourceMappingURL=style.css.map */

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Инструкция по заполнению locationData</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.5;
+            margin: 20px;
+            max-width: 800px;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-family: Consolas, monospace;
+        }
+
+        pre {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-left: 4px solid #4CAF50;
+            overflow-x: auto;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Инструкция по заполнению данных для <code>locationData</code></h1>
+
+    <p>Этот файл содержит данные по участкам, которые используются для отображения информации на карте и в балуне.</p>
+
+    <h2>Общая структура объекта <code>locationData</code></h2>
+
+    <p>Каждый участок в <code>locationData</code> задаётся как объект, где ключ — это <code>id</code> элемента SVG, а значение — объект с параметрами:</p>
+
+    <pre><code>locationData = {
+  'id_элемента': {
+    name: 'Название участка или номер',
+    status: STATUS_FREE,        // Статус участка (см. ниже)
+    area: 1234.56,             // Площадь участка в м² (число)
+    price: 12345678,           // Цена участка в рублях (число)
+    houseArea: 150,            // Площадь дома в м² (число, необязательно)
+    housePrice: 23500000,      // Цена дома в рублях (число, необязательно)
+    img: 'plan-image1.jpg'     // Имя файла изображения дома (строка, необязательно)
+  },
+  // другие участки...
+}
+</code></pre>
+
+    <h2>Пояснения к параметрам</h2>
+
+    <ul>
+        <li><strong><code>name</code></strong> — название или номер участка. Обязательное для отображения.</li>
+        <li><strong><code>status</code></strong> — статус участка. Используйте одну из предопределённых переменных статуса (ниже). Если не указано — будет присвоен статус <code>STATUS_FREE</code>.</li>
+        <li><strong><code>area</code></strong> — площадь участка в квадратных метрах (число). Отображается с округлением вниз и с разделением тысяч пробелами.</li>
+        <li><strong><code>price</code></strong> — цена участка в рублях (число). Отображается с разделением тысяч пробелами и знаком ₽.</li>
+        <li><strong><code>houseArea</code></strong> — площадь дома в м² (число). Необязательный параметр. Если не указан — используется значение по умолчанию.</li>
+        <li><strong><code>housePrice</code></strong> — цена дома в рублях (число). Необязательный параметр. Если не указан — используется значение по умолчанию.</li>
+        <li><strong><code>img</code></strong> — имя файла с изображением дома (например, <code>plan-image1.jpg</code>). Необязательный параметр. <strong>Изображения должны находиться в папке <code>img/</code> вашего проекта.</strong> Если указано, изображение будет показано в балуне.</li>
+    </ul>
+
+    <h2>Статусы участка</h2>
+
+    <p>Чтобы избежать ошибок в написании, <strong>используйте в параметре <code>status</code> переменные из кода</strong>. Ниже перечислены предопределённые переменные, которые доступны в вашем скрипте:</p>
+
+    <pre><code>const STATUS_FREE = 'Свободный участок';
+const STATUS_HOUSE_READY = 'Участок с готовым домом';
+const STATUS_HOUSE_BUILDING = 'Участок со строящимся домом';
+const STATUS_RESERVED = 'Забронированный участок';
+const STATUS_SOLD = 'Проданный участок';
+</code></pre>
+
+    <p>Пример правильного указания статуса в <code>locationData</code>:</p>
+
+    <pre><code>locationData = {
+  'path12345': {
+    name: 'Участок 12',
+    status: STATUS_HOUSE_READY,
+    area: 1800,
+    price: 9500000,
+    houseArea: 160,
+    housePrice: 22000000,
+    img: 'plan-image12.jpg'
+  }
+}
+</code></pre>
+
+    <h2>Пример полного объекта <code>locationData</code></h2>
+
+    <pre><code>const locationData = {
+  'path62461': {
+    name: 'Участок 3665',
+    status: STATUS_FREE,
+    area: 1669,
+    price: 8900000,
+    houseArea: 150,
+    housePrice: 23500000,
+    img: 'plan-image1.jpg'
+  },
+  'path62465': {
+    name: 'Участок 3277',
+    status: STATUS_SOLD,
+    area: 1132,
+    price: 6000000,
+    houseArea: 140,
+    housePrice: 21000000
+  },
+  'p1-1': {
+    name: '1.1',
+    status: STATUS_HOUSE_BUILDING,
+    area: 1532.24,
+    price: 7200000
+    // houseArea и housePrice будут использованы значения по умолчанию
+  }
+};
+</code></pre>
+
+    <h2>Советы</h2>
+
+    <ul>
+        <li>Всегда используйте переменные для <code>status</code>, чтобы избежать опечаток.</li>
+        <li>Если параметр не нужен или неизвестен, его можно опустить.</li>
+        <li>Цены и площади указывайте в числовом формате (без пробелов и дополнительных символов).</li>
+        <li><strong>Все изображения должны лежать в папке <code>img/</code> вашего проекта</strong>, и указывайте только имя файла в параметре <code>img</code>.</li>
+    </ul>
+
+</body>
+
+</html>

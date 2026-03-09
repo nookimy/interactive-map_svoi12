@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="css/style.css">
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	</head>
+	<body>
+		<div id="preloader">
+			<div class="loader"></div>
+			<div id="loading-text">Загружаем<span class="dots"></span></div>
+		</div>
+		<include src="./_src/blocks/map/map.html"></include>
+		<script src="js/navigation.js"></script>		
+		<script src="js/baloon-content.js"></script>
+		<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const preloader = document.getElementById("preloader");
+    const dotsEl = document.querySelector(".dots");
+    let dotCount = 0;
+
+    // Запускаем анимацию точек
+    const dotInterval = setInterval(() => {
+      dotCount = (dotCount + 1) % 4; // 0,1,2,3
+      dotsEl.textContent = ".".repeat(dotCount);
+    }, 300);
+
+    // Когда страница полностью загружена
+    window.addEventListener("load", function () {
+      clearInterval(dotInterval);
+      preloader.classList.add("hidden");
+
+      // Удаляем элемент из DOM после анимации
+      setTimeout(() => {
+        preloader.remove();
+      }, 500);
+    });
+  });
+</script>
+
+
+	</body>
+</html>
