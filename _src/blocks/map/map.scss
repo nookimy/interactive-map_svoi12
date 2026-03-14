@@ -148,6 +148,12 @@ svg {
   color: #fff;
 }
 
+.balloon__button--transparent {
+  background-color: transparent;
+  color: #2D5E58;
+  border-color: #2D5E58;
+}
+
 .location {
   font-size: 16px;
   color: #2B2A29;
@@ -367,4 +373,23 @@ svg {
 #preloader.hidden {
   opacity: 0;
   visibility: hidden;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  white-space: nowrap;
+  clip-path: inset(100%);
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
+.balloon__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
