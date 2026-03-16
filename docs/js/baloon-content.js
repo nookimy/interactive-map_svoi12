@@ -26,7 +26,6 @@ jQuery(document).ready(function ($) {
         '181': { status: STATUS_HOUSE_BUILDING, name: '181', area: 9.45, price: '99999999', houseArea: 140, housePrice: 22000000 },
         '182': { status: STATUS_SOLD, name: '182', area: 10.2, price: '99999999', houseArea: 180, housePrice: 27000000 },
         '183': { status: STATUS_FREE, name: '183', area: 6.8,},
-
     };
 
     // Функция окраски
